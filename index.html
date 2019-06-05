@@ -1,0 +1,85 @@
+<html>
+
+    <head>
+        <title>Binary test</title>
+        <meta charset="utf-8">
+        
+        <style>
+        
+            div.form {
+                width: 60%;
+                margin: 20px auto;
+            }
+            
+            div.form textarea {
+                display: inline-block;
+                width: 90%;
+                height: 150px;
+                resize: none;
+            }
+        
+        </style>
+        
+    </head>
+    
+    <body>
+        <div class="form">
+            
+                <h2>Decimal</h2>
+                <textarea id="decimal_textarea"></textarea>
+                <button onclick="encodeToBinary()">Encode</button>
+            
+            <hr>
+            
+                <h2>Binary</h2>
+                <textarea id="binary_textarea"></textarea>
+                <button onclick="decodeToDecimal()">Decode</button>
+        </div>
+        
+        <script type="text/javascript">
+            
+            function encodeToBinary() {
+                var decimal_textarea = document.getElementById('decimal_textarea');
+                var binary_textarea = document.getElementById('binary_textarea');
+                
+                var decimal = decimal_textarea.value;
+                
+                var binary = new Array;
+                
+                while (decimal > 0) {
+                    binary.push(decimal % 2);
+                    decimal = Math.floor(decimal / 2);
+                }
+                
+                binary.reverse();
+                binary = binary.join('');
+                
+                binary_textarea.value = binary;
+            }
+        
+            function decodeToDecimal() {
+                
+                var decimal_textarea = document.getElementById('decimal_textarea');
+                var binary_textarea = document.getElementById('binary_textarea');
+                
+                var bits = binary_textarea.value;
+                var countBit = bits.length;
+                var reverse = bits.split('').reverse().join('');
+                
+                var decimal = 0;
+                
+                
+                for (var i = 0; i <= countBit - 1; i++) {                                    
+                    decimal += Number(reverse[i]) * Math.pow(2, i);                   
+                }
+                
+                decimal_textarea.value = decimal;
+                
+            }
+            
+            
+        </script>
+        
+    </body>
+    
+</html>
