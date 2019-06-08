@@ -6,16 +6,24 @@
         
         <style>
         
-            div.form {
+            .form {
+                
                 width: 60%;
                 margin: 20px auto;
             }
             
-            div.form textarea {
+            .form textarea {
                 display: inline-block;
-                width: 90%;
+                width: 100%;
                 height: 150px;
                 resize: none;
+            }
+            
+            button {
+                display: block;
+                width: 150px;
+                height: 55px;
+                margin: 0 auto;
             }
         
         </style>
@@ -23,24 +31,126 @@
     </head>
     
     <body>
-        <div class="form">
-            
-                <h2>Decimal</h2>
-                <textarea id="decimal_textarea"></textarea>
-                <button onclick="encodeToBinary()">Encode</button>
-            
-            <hr>
-            
-                <h2>Binary</h2>
-                <textarea id="binary_textarea"></textarea>
-                <button onclick="decodeToDecimal()">Decode</button>
-        </div>
+        
+        <table class="form">
+            <tr>
+                <th>
+                    <h2>Text</h2>
+                </th>
+                <th></th>
+                <th>
+                    <h2>Binary</h2>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <textarea id="text"></textarea>
+                </td>
+                <td>
+                    <button onclick="textToBinary()">Encode</button>
+                    <button onclick="binaryToText()">Decode</button>
+                </td>
+                <td>
+                    <textarea id="binary_textarea"></textarea>
+                </td>
+            </tr>
+        </table>
+        
+        <hr>
+        
+        <table class="form">
+            <tr>
+                <th>
+                    <h2>Decimal</h2>
+                </th>
+                <th></th>
+                <th>
+                    <h2>Binary</h2>
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <textarea id="decimal_textarea"></textarea>
+                </td>
+                <td>
+                    <button onclick="encodeToBinary()">Encode</button>
+                    <button onclick="decodeToDecimal()">Decode</button>
+                </td>
+                <td>
+                    <textarea id="binary_textarea2"></textarea>
+                </td>
+            </tr>
+        </table>
+
         
         <script type="text/javascript">
+
+            function textToBinary() {
+                
+                var binary_textarea = document.getElementById('binary_textarea');
+                var text = document.getElementById("text").value;
+                var result = new Array;
+                                
+                for (var i = 0; i < text.length; i++) {
+                    
+                    var charBin = new Array;
+                    
+                    var decimal = text[i].charCodeAt();
+                    
+                    while (decimal > 0) {
+                        charBin.push(decimal % 2);
+                        decimal = Math.floor(decimal / 2);
+                    }
+                    
+                    while (charBin.length < 8) {
+                        charBin.push('0');
+                    }
+                    
+                    charBin = charBin.reverse().join('');
+                    
+                    result.push(charBin);
+                    
+                } 
+                
+                result = result.join(' ');
+                
+                binary_textarea.value = result;
+            }
+            
+            function binaryToText() {
+                
+                var text_textarea = document.getElementById("text");
+                var binary = document.getElementById('binary_textarea').value;
+                
+                var result = new Array;
+                
+                var charBin = binary.split(' ');
+                
+                for (var i = 0; i < charBin.length; i++) {
+                    
+//                    String.fromCharCode()
+                    
+                    var count = charBin[i].length;
+                    var revString = charBin[i].split('').reverse().join('');
+                    var decimal = 0;
+                    
+                    for (var j = 0; j < count; j++) {
+                        decimal += Number(revString[j]) * Math.pow(2, j);
+                    }
+                    
+                    result.push(String.fromCharCode(decimal));
+                    
+                }
+                
+                result = result.join('');
+                
+                text_textarea.value = result;
+                
+            }
             
             function encodeToBinary() {
                 var decimal_textarea = document.getElementById('decimal_textarea');
-                var binary_textarea = document.getElementById('binary_textarea');
+                var binary_textarea = document.getElementById('binary_textarea2');
                 
                 var decimal = decimal_textarea.value;
                 
@@ -60,7 +170,7 @@
             function decodeToDecimal() {
                 
                 var decimal_textarea = document.getElementById('decimal_textarea');
-                var binary_textarea = document.getElementById('binary_textarea');
+                var binary_textarea = document.getElementById('binary_textarea2');
                 
                 var bits = binary_textarea.value;
                 var countBit = bits.length;
